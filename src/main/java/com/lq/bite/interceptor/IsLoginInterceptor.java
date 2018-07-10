@@ -23,12 +23,12 @@ public class IsLoginInterceptor implements HandlerInterceptor{
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object arg2) throws Exception {
-		String userName = request.getSession().getAttribute("userName").toString();
-		if(StringUtils.isNotBlank(userName)){
-			return true;
-		}
-		response.sendRedirect("/page/toIndex");
-		return false;
+//		String userName = request.getSession().getAttribute("userName").toString();
+//		if(StringUtils.isNotBlank(userName)){
+//			return true;
+//		}
+//		response.sendRedirect("/page/toIndex");
+		return true;
 	}
 	
 }

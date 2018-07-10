@@ -1,5 +1,6 @@
 package com.lq.bite.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lq.bite.base.BaseController;
@@ -18,19 +20,41 @@ import com.lq.bite.entity.User;
 import com.lq.bite.service.UserService;
 import com.lq.bite.utils.StringUtils;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @RequestMapping("user")
+@Api(value = "/pets", tags = "对User的操作", description = "关于pets的操作")
 public class UserController extends BaseController {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	@Autowired
 	private UserService userService;
+	
+	@ApiOperation(value = "放入session方法", notes = "放入session方法 ")
+	@RequestMapping(value = "/first", method = RequestMethod.GET)  
+    public Map<String, Object> firstResp (HttpServletRequest request){  
+        Map<String, Object> map = new HashMap<>();  
+        request.getSession().setAttribute("requestUrl", request.getRequestURL());  
+        map.put("request Url", request.getRequestURL());  
+        return map;  
+    }  
+  
+    @RequestMapping(value = "/sessions", method = RequestMethod.GET)  
+    public Object sessions (HttpServletRequest request){  
+        Map<String, Object> map = new HashMap<>();  
+        map.put("sessionId", request.getSession().getId());  
+        map.put("message", request.getSession().getAttribute("request Url"));  
+        return map;  
+    }  
+	
 	/**
 	 * 用户登录请求
 	 * @param user
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping("login")
+	@RequestMapping(value="login",method = RequestMethod.GET)
 	public Map<String, Object> login(User user,HttpServletRequest request) {
 		if (!StringUtils.isALLNotBlank(user.getPassword(), user.getUserName())) {
 			logger.info("password=" + user.getPassword() + "    userName=" + user.getUserName());
@@ -52,8 +76,8 @@ public class UserController extends BaseController {
 		request.getSession().setAttribute("userName", user.getUserName());
 		return returnSuccess(user.getUserName(),Constant.USER_LOGIN_SUCCESS);
 	}
-
-	@RequestMapping("saveUser")
+	@ApiOperation(value = "/saveUser", notes = "保存一个user ")
+	@RequestMapping(value = "saveUser", method = RequestMethod.POST)
 	public Map<String, Object> saveUser(User user) {
 		if (user.getId() == 0) {
 			// 注册

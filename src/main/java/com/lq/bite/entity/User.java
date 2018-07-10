@@ -2,17 +2,27 @@ package com.lq.bite.entity;
 
 import java.util.Date;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * 用户
  * @author l.q
  *
  */
+@ApiModel(value = "User", description = "用户信息描述")
 public class User {
+	@ApiModelProperty("用户id")
 	private int id;
+	@ApiModelProperty("用户名")
 	private String userName;
+	@ApiModelProperty("密码")
 	private String password;
+	@ApiModelProperty("邮箱")
 	private String email;
+	@ApiModelProperty("创建时间")
 	private Date createDate;
+	@ApiModelProperty("是否有限 0有效1无效")
 	private String yn;//0有效1无效
 	public int getId() {
 		return id;
